@@ -19,10 +19,10 @@ A scalable and serverless PDF processing platform built on **Google Cloud Platfo
 ## 📸 Screenshots
 
 ### Upload Interface
-![Upload UI](images/home.png)
+![Upload UI](home.png)
 
 ### Logs Dashboard
-![Logs UI](images/logs.png)
+![Logs UI](logs.png)
 
 ## 🏗️ Architecture
 
@@ -59,10 +59,6 @@ A scalable and serverless PDF processing platform built on **Google Cloud Platfo
 │ Firestore   │
 │ Database    │
 └─────────────┘
-
-![Upload UI](images/gcp1.png)
-
-![Logs UI](images/gcp2.png)
 
 ```
 
