@@ -13,17 +13,21 @@ A cloud-native web application built using **Google Cloud Platform (GCP)** and *
 - **Firestore**: Structured log storage
 - **Cloud Run**: Scalable backend hosting
 
+![Upload UI](gcp1.png)
+
+![Logs UI](gcp2.png)
+
 ---
 
 ## 📸 Screenshots
 
 ### 🔹 Upload Interface
 
-![Upload UI](logs.png)
+![Upload UI](home.png)
 
 ### 🔹 Log Viewer
 
-![Logs UI](home.png)
+![Logs UI](logs.png)
 
 ---
 
@@ -60,16 +64,3 @@ A cloud-native web application built using **Google Cloud Platform (GCP)** and *
 | **Firestore** | Logging extracted data |
 | **Cloud Run** | Hosting the web app |
 
----
-
-## 📦 Folder Structure
-
-├── app.py
-├── Dockerfile
-├── requirements.txt
-├── templates/
-│ ├── index.html
-│ └── logs.html
-├── cloud-function/
-│ └── main.py
-└── README.md
