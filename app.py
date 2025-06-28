@@ -9,8 +9,8 @@ storage_client = storage.Client()
 publisher = pubsub_v1.PublisherClient()
 
 # Env vars (set in Cloud Run or locally)
-PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")
-TOPIC_NAME = os.getenv("TOPIC_ID", "new-file-upload")
+PROJECT_ID = "sm-vita-project"  # Replace with your actual project ID
+TOPIC_NAME = "new-file-upload"
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -25,14 +25,16 @@ def index():
 
             # Publish to Pub/Sub
             topic_path = publisher.topic_path(PROJECT_ID, TOPIC_NAME)
-            publisher.publish(topic_path, attributes={
-                "bucket": bucket_name,
-                "name": file.filename
-            })
+            publisher.publish(
+                topic_path,
+                b"",  # Empty message body
+                bucket=bucket_name,
+                name=file.filename
+        )
 
             return "✅ File uploaded and message published!"
 
     return render_template("index.html")
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+    app.run(host="127.0.0.1", port=5000)
