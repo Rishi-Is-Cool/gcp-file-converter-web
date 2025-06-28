@@ -4,11 +4,13 @@ import os
 
 app = Flask(__name__)
 
-# Configure clients
+# GCP Clients
 storage_client = storage.Client()
 publisher = pubsub_v1.PublisherClient()
+
+# Env vars (set in Cloud Run or locally)
 PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")
-TOPIC_NAME = "new-file-upload"
+TOPIC_NAME = os.getenv("TOPIC_ID", "new-file-upload")
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -16,20 +18,21 @@ def index():
         file = request.files["file"]
         if file:
             # Upload to Cloud Storage
-            bucket = storage_client.bucket("uploaded-files-" + PROJECT_ID)
+            bucket_name = f"uploaded-files-{PROJECT_ID}"
+            bucket = storage_client.bucket(bucket_name)
             blob = bucket.blob(file.filename)
             blob.upload_from_string(file.read(), content_type=file.content_type)
-            
-            # Trigger conversion via Pub/Sub
+
+            # Publish to Pub/Sub
             topic_path = publisher.topic_path(PROJECT_ID, TOPIC_NAME)
             publisher.publish(topic_path, attributes={
-                "bucket": "uploaded-files-" + PROJECT_ID,
+                "bucket": bucket_name,
                 "name": file.filename
             })
-            
-            return "File uploaded! Conversion started."
-    
+
+            return "✅ File uploaded and message published!"
+
     return render_template("index.html")
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+    app.run(host="0.0.0.0", port=8080)
