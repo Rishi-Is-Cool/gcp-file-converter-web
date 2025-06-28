@@ -1,13 +1,105 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>File Converter</title>
+  <meta charset="UTF-8">
+  <title>Smart File Uploader</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9fafb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h1 {
+      font-size: 22px;
+      margin-bottom: 20px;
+      color: #111827;
+    }
+
+    input[type="file"] {
+      padding: 10px;
+      margin-bottom: 20px;
+      font-size: 15px;
+      border-radius: 6px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2563eb;
+    }
+
+    #message {
+      margin-top: 20px;
+      color: green;
+      font-weight: bold;
+      display: none;
+    }
+  </style>
 </head>
 <body>
+  <div class="card">
     <h1>Upload a File</h1>
-    <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="file" required>
-        <button type="submit">Upload</button>
+    <form id="uploadForm" method="post" enctype="multipart/form-data">
+      <input type="file" name="file" required><br>
+      <button type="submit">Upload</button>
     </form>
+    <div id="message">Uploading...</div>
+  </div>
+
+  <script>
+    const form = document.getElementById('uploadForm');
+    const msg = document.getElementById('message');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      msg.style.display = 'block';
+      msg.textContent = 'Uploading...';
+
+      const formData = new FormData(form);
+
+      fetch('/', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => {
+        if (res.ok) {
+          msg.textContent = '✅ Upload successful! Redirecting to logs...';
+          setTimeout(() => {
+            window.location.href = '/logs';
+          }, 1500);
+        } else {
+          msg.textContent = '❌ Upload failed. Please try again.';
+          msg.style.color = 'red';
+        }
+      })
+      .catch(() => {
+        msg.textContent = '❌ Network error. Please try again.';
+        msg.style.color = 'red';
+      });
+    });
+  </script>
 </body>
 </html>
